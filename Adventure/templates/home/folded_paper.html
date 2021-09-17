@@ -1,0 +1,36 @@
+<head>
+{% load static %}
+  <meta charset="utf-8" />
+  <title>Flexible Folded Paper Effect</title>
+    <link rel="stylesheet" href="{% static 'css/folded_paper.css' %}">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+</head>
+
+<body>
+  <div id="page-wrap">
+    <audio controls  muted id="Audio" src="{{ audio }}" preload="auto"></audio>
+      <div class="paper">
+        <section>
+          <h1>The Story Begins</h1>
+          <hr />
+        </section> 
+        <button id="begin">Press to begin</button> 
+        <section>
+          <p class="hidden" id="user-caption">{{ message }}</p>
+          <p id="caption"></p>
+          <br>
+          <br>
+          <button id="shownext" class="hidden" href={{ "" }}>Press to continue</button> 
+        </section>
+        <section>
+        </section>
+        <section>
+        </section>
+      </div>
+ 
+  </div> <!-- END page-wrap -->
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+<script src={% static 'js/typing.js' %} language="JavaScript"></script>
+</body>
+</html>
