@@ -9,7 +9,7 @@
 
 <body>
   <div id="page-wrap">
-    <audio controls  muted id="Audio" src="{{ audio }}" preload="auto"></audio>
+    <audio controls unmuted id="Audio" src="{{ audio }}" preload="auto"></audio>
       <div class="paper">
         <section>
           <h1>The Story Begins</h1>
@@ -21,7 +21,9 @@
           <p id="caption"></p>
           <br>
           <br>
-          <button id="shownext" class="hidden" href={{ "" }}>Press to continue</button> 
+          <form id="shownext" class="hidden" action="{% url 'clue' adventure=adventure name=cluename %}">
+            <input type="submit" value="Press to continue" />
+        </form>
         </section>
         <section>
         </section>

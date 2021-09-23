@@ -1,10 +1,11 @@
 <head>
 {% load static %}
+{% csrf_token %}
 <link rel="stylesheet" href="{% static 'css/keypad.css' %}">
 <head>
 <main>
   <div class="screen">
-    <span class="text"></span>
+    <span class="text" id="id_number" name="answer">{{ answer }}</span>
     <div class="cursor"></div>
   </div>
   <div class="keypad">
@@ -21,4 +22,7 @@
     <button>GO</button>
     <button>DEL</button>
   </div>
+<form method='post'>
+{% csrf_token %}
+  </form>
 </main>

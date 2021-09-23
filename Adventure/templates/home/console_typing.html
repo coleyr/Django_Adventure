@@ -6,13 +6,15 @@
 </header>
 <body>
 <button id="begin">Press to begin</button>
-<audio controls  muted id="Audio" src="{{ audio }}" preload="auto"></audio>
+<audio controls  unmuted id="Audio" src="{{ audio }}" preload="auto"></audio>
 <p id="user-caption" class="hidden">{{ message }}</p>
 <p class="consolePrototype">
     <span class="console">C:\</span><span id="caption"></span><span class="cursor">|</span>
 </p>
 <p class="console"></p>
-<button id="shownext" class="hidden" href={{ "" }}>Press to continue</button> 
+<form id="shownext" class="hidden" action="{% url 'clue' adventure=adventure name=cluename %}">
+    <input type="submit" value="Press to continue" />
+</form>
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
 <script src={% static 'js/typing.js' %} language="JavaScript"></script>
 </body>

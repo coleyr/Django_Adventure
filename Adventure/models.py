@@ -1,10 +1,26 @@
 from django.db import models
 from django.core.validators import validate_slug
+from django.db.models.deletion import CASCADE, SET_DEFAULT, SET_NULL
+
 # Create your models here.
+class Image(models.Model):
+    imagefile = models.FileField(upload_to='images')
+    name = models.CharField(max_length=100)
+    def __str__(self):
+        return f'{self.name}'
+
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(fields=['imagefile'], name='imagefile_unique_constraint')
+        ]
+
+# def get_default_image():
+#     return Image.objects.get(name="default")
 
 class Adventure(models.Model):
     name = models.CharField(max_length=200, validators=[validate_slug])
-    description = models.CharField(max_length=200)
+    image = models.ForeignKey(Image, on_delete=SET_NULL, related_query_name="image", null=True)
+    description = models.TextField(max_length=500)
 
     def __str__(self):
         return f'{self.name}'
@@ -25,16 +41,7 @@ class Audio(models.Model):
             models.UniqueConstraint(fields=['audiofile'], name='audiofile_unique_constraint')
         ]
 
-class Image(models.Model):
-    image = models.FileField(upload_to='images')
-    name = models.CharField(max_length=100)
-    def __str__(self):
-        return f'{self.name}'
 
-    class Meta:
-        constraints = [
-            models.UniqueConstraint(fields=['image'], name='imagefile_unique_constraint')
-        ]
 class MessageDisplay(models.Model):
     name = models.CharField(max_length=100)
     def __str__(self):
@@ -79,6 +86,7 @@ ClueOrder = models.IntegerChoices('ClueOrder', 'FIRST SECOND THIRD FOURTH FIFTH 
 class Clue(models.Model):
     name = models.CharField(max_length=100)
     adventure = models.ForeignKey(Adventure, on_delete=models.CASCADE, related_query_name="adventure")
+    answer = models.CharField(max_length=100)
     clueorder = models.IntegerField(choices=ClueOrder.choices)
     audio = models.ForeignKey(Audio, on_delete=models.CASCADE, related_query_name="audio", blank=True, null=True)
     display = models.ForeignKey(ClueDisplay, on_delete=models.CASCADE, related_query_name="display")
@@ -87,6 +95,6 @@ class Clue(models.Model):
 
     class Meta:
         constraints = [
-            models.UniqueConstraint(fields=['adventure'], name='clue_adventure_constraint')
+            models.UniqueConstraint(fields=['adventure', 'clueorder'], name='clue_adventure_constraint')
         ]
 

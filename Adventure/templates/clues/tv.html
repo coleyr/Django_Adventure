@@ -1,0 +1,33 @@
+{% load static %}
+<head>
+<link rel="stylesheet" href="{% static 'css/tv.css' %}">
+<title>TV</title>
+</head>
+
+<div class="contain">
+  <div class="tv">
+    <div class="outerRing">
+      <div class="middleRing">
+        <div class="innerRing">
+          <div class="screen crtOff">
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="sidePanel">
+      <div class="channelBox">
+        <div class="channelScreen"></div>
+        <div class="power"></div>
+        <span class="powerText">Power</span>
+        <div class="channelSelect">
+          <button class="buttons" id="upButton"><i class="fa fa-arrow-up" aria-hidden="true"></i></button>
+          <button class="buttons" id="downButton"><i class="fa fa-arrow-down" aria-hidden="true"></i></button>
+        </div>
+        <span class="channelText">Channel</span>
+      </div>
+    </div>
+    <div class="base"></div>
+  </div>
+</div>
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+<script src={% static 'js/tv.js' %} language="JavaScript"></script>

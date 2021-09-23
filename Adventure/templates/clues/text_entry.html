@@ -1,0 +1,11 @@
+{% load static %}
+<form id="entry">
+<link rel="stylesheet" href="{% static 'css/keypad.css' %}">
+ <input type="text" name="answer">
+ <input type="submit">
+</form>
+{% if next != "" %}
+    <form id="shownext" class="hidden" action="{% url 'clue' adventure=adventure name=next %}">
+        <input type="submit" value="Press to continue" />
+    </form>
+{% endif %}
