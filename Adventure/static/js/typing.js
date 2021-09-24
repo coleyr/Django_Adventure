@@ -28,7 +28,8 @@ function testTypingEffect() {
 function type() {
     captionEl.html(caption.substr(0, captionLength++));
     if (captionLength == caption.length){
-       showNext();
+        setTimeout('type()', 75);
+        showNext();
     } else if (captionLength < caption.length+1){
         setTimeout('type()', 75);
     }   else {
@@ -37,7 +38,7 @@ function type() {
     }
 }
 function showNext(){
-    document.getElementById('shownext').classList.remove('hidden')
+    document.getElementById('nextbutton').classList.remove('hidden')
 }
 function testErasingEffect() {
     caption = captionEl.html();

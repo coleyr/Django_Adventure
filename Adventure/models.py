@@ -42,54 +42,32 @@ class Audio(models.Model):
         ]
 
 
-class MessageDisplay(models.Model):
+class Video(models.Model):
+    videofile = models.FileField(upload_to='video')
     name = models.CharField(max_length=100)
     def __str__(self):
         return f'{self.name}'
 
     class Meta:
         constraints = [
-            models.UniqueConstraint(fields=['name'], name='message_type_constraint')
+            models.UniqueConstraint(fields=['videofile'], name='videofile_unique_constraint')
         ]
-        verbose_name = 'Message Type'
-        verbose_name_plural = 'Message Types'   
+  
 
-class ClueDisplay(models.Model):
-    name = models.CharField(max_length=100)
-    def __str__(self):
-        return f'{self.name}'
-
-    class Meta:
-        constraints = [
-            models.UniqueConstraint(fields=['name'], name='clue_type_constraint')
-        ]
-        verbose_name = 'Clue Type'
-        verbose_name_plural = 'Clue Types'   
-
-class StartingMessage(models.Model):
-    message_text = models.TextField(max_length=1000)
-    adventure = models.ForeignKey(Adventure, on_delete=models.CASCADE, related_query_name="adventure")
-    audio = models.ForeignKey(Audio, on_delete=models.CASCADE, related_query_name="audio", blank=True, null=True)
-    display = models.ForeignKey(MessageDisplay, on_delete=models.CASCADE, related_query_name="display")
-    def __str__(self):
-        return f'{self.adventure.name} - Starting Message'
-
-    class Meta:
-        constraints = [
-            models.UniqueConstraint(fields=['adventure'], name='message_adventure_constraint')
-        ]
-        verbose_name = 'Starting Message'
-        verbose_name_plural = 'Starting Messages'
 
 ClueOrder = models.IntegerChoices('ClueOrder', 'FIRST SECOND THIRD FOURTH FIFTH SIXTH SEVENTH EIGHTH NINTH TENTH ELEVENTH TWELFTH THIRTEENTH FOURTEENTH FIFTEENTH')
 
 class Clue(models.Model):
     name = models.CharField(max_length=100)
+    character_name = models.CharField(max_length=100, default="Det. Ace Palmer")
+    message = models.TextField(max_length=1000, default="Enter message here")
+    success_message = models.TextField(max_length=1000, default="Enter message to be displayed on successful entry of answer")
     adventure = models.ForeignKey(Adventure, on_delete=models.CASCADE, related_query_name="adventure")
     answer = models.CharField(max_length=100)
     clueorder = models.IntegerField(choices=ClueOrder.choices)
-    audio = models.ForeignKey(Audio, on_delete=models.CASCADE, related_query_name="audio", blank=True, null=True)
-    display = models.ForeignKey(ClueDisplay, on_delete=models.CASCADE, related_query_name="display")
+    audio = models.ForeignKey(Audio, on_delete=models.SET_NULL, related_query_name="audio", blank=True, null=True)
+    video = models.ForeignKey(Video, on_delete=models.SET_NULL, related_query_name="video", blank=True, null=True)
+    image = models.ForeignKey(Image, on_delete=models.SET_NULL, related_query_name="image", blank=True, null=True)
     def __str__(self):
         return f'{self.adventure.name} - Clue{self.clueorder}'
 

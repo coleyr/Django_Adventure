@@ -1,0 +1,53 @@
+<html>
+<header>
+{% load static %}
+
+<link rel="stylesheet" href="{% static 'css/typing_styles.css' %}">
+</header>
+<body>
+{% if answer == ""%}
+    <button id="begin">Click to Begin</button>
+    <br>
+{% endif %}
+<br>
+{% if answer == "correct"%}
+    <h2 class="text-center mt-0 bg-success">Correct!</h2>
+    <button id="begin">Continue</button>
+    <br>
+{% endif %}
+{% if audio != ""%}
+    <br>
+    <audio controls  unmuted id="Audio" src="{{ audio }}" preload="auto"></audio>
+{% endif %}
+{% if video != ""%}
+<br>
+<p>Press to view full screen</p>
+<video class='cluemedia' controls="controls" preload='none' poster="">
+    <source id='mp4' src="http://media.w3.org/2010/05/sintel/trailer.mp4" type='video/mp4' />
+    <p>Your user agent does not support the HTML5 Video element.</p>
+</video>
+{% endif %}
+{% if image != ""%}
+    <br>
+    <p>Press to view full screen</p>
+    <image class='cluemedia clueimagemedia' src="{{ image }}">
+{% endif %}
+<p id="user-caption" class="hidden">{{ message }}</p>
+<p class="consolePrototype">
+    <span class="console">{{ character_name }}: </span><span id="caption"></span><span class="cursor">|</span>
+</p>
+<p class="console">{% if answer != "correct" and answer != ""%}{{ message }}{% endif %}</p>
+<br>
+<br>
+{% if answer == "correct"%}
+    {% if nextclue != ""%}
+        <input type="button" class="btn btn-primary btn-xl hidden" id="nextbutton" onclick="location.href='{{ nextclue }}';" value="Next" />
+    {% endif %}
+    {% if nextclue == ""%}
+        <p class="col-lg-8 col-xl-6 text-center">No Next Clue Yet</p>
+    {% endif %}
+{% endif %}
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+<script src={% static 'js/typing.js' %} language="JavaScript"></script>
+</body>
+</html>

@@ -1,56 +1,82 @@
 from django.shortcuts import render, HttpResponse
 from django.template import loader
-from .models import StartingMessage, Adventure, Clue
+from django.urls import reverse
+from .models import Adventure, Clue
 # Create your views here.
-adventure_image_urls = {adventure.name: [adventure.image.imagefile.url, adventure.description] for adventure in Adventure.objects.all() if adventure.image}
+
+def get_adventures():
+    adventures = {}
+    for adventure in Adventure.objects.all():
+        try:
+            FirstClueName = Clue.objects.get(adventure__name__contains=adventure, clueorder=1).name
+            clueurl = reverse('clue', kwargs={'name': FirstClueName, 'adventure': adventure})
+        except:
+            clueurl = "#NO FIRST CLUE"
+        adventures[adventure.name] = {
+        "image": adventure.image.imagefile.url,
+        "description": adventure.description,
+        "clueurl": clueurl
+        }
+
+    return adventures
 
 def getnext(clue, adventure):
     try:
         next_clue = Clue.objects.get(adventure__name__contains=adventure, clueorder=clue.clueorder + 1)
-        return next_clue.name
+        clueurl = reverse('clue', kwargs={'name': next_clue.name, 'adventure': adventure})
+        return clueurl
     except:
-        print("NO NEXT CLUE")
         return ""
-    
 
-def startmessage(request, adventure):
-    StartMessage = StartingMessage.objects.get(adventure__name__contains=adventure)
-    firstclue = Clue.objects.get(adventure__name__contains=adventure, clueorder__contains='1').name
-    audio = StartMessage.audio.audiofile.url if StartMessage.audio else ""
-    message = StartMessage.message_text or ""
-    template = (loader.get_template(f'home/{StartMessage.display.name}.html')
-                if StartMessage.display
-                else loader.get_template('home/console_typing.html'))
-    context = {
-        'message': message,
-        'audio': audio,
-        'cluename': firstclue,
-        'adventure': adventure
-    }
-    return HttpResponse(template.render(context, request))
+def getcurrent(clue, adventure):
+    try:
+        current_clue = Clue.objects.get(adventure__name__contains=adventure, clueorder=clue.clueorder)
+        clueurl = reverse('clue', kwargs={'name': current_clue.name, 'adventure': adventure})
+        return clueurl
+    except:
+        return "#"
 
 def clue(request, adventure, name):
-    given_answer = request.GET.get("answer", "")
     clue = Clue.objects.get(adventure__name__contains=adventure, name__contains=name)
-    correct_answer = clue.answer
+    given_answer = request.GET.get("answer", "")
+    correct_answer = clue.answer == given_answer
+    cluename = clue.name
+    message = clue.message
+    character_name = clue.character_name
     audio = clue.audio.audiofile.url if clue.audio else ""
-    display = clue.display.name
-    template = (f'clues/{display}.html')
-    next_clue_name = ""
-    if given_answer == correct_answer:
-        next_clue_name = getnext(clue, adventure)
-    context = {
-        'audio': audio,
+    video = clue.video.videofile.url if clue.video else ""
+    image = clue.image.imagefile.url if clue.image else ""
+    displaycontext = {'message': message,'audio': audio, 'video': video, 'image': image, "character_name": character_name, "answer": given_answer}
+    displayhtml = loader.render_to_string("clues/display.html", displaycontext)
+    inputcontext = {"answer": given_answer}
+    inputhtml = loader.render_to_string("clues/input.html", inputcontext)
+    absolute_url = request.build_absolute_uri(getcurrent(clue, adventure))
+    if correct_answer:
+        nextclue = getnext(clue, adventure) or ""
+        displaycontext = {'message': clue.success_message, 'audio': "", 'video': "", 'image': "", "character_name": character_name, "answer": "correct", 'nextclue': nextclue}
+        displayhtml = loader.render_to_string("clues/display.html", displaycontext)
+        context = {
         'adventure': adventure,
-        'next': next_clue_name
+        'cluename': cluename,
+        'display': displayhtml,
+        'input': f"<h2 class='text-center mt-0'>Correct Answer: {given_answer}</h2>",
+        'saveurl': absolute_url
     }
-    return render(request, template, context)
+        return render(request, "clues/basic.html", context)
+    context = {
+        'adventure': adventure,
+        'cluename': cluename,
+        'display': displayhtml,
+        'input': inputhtml,
+        'saveurl': absolute_url
+    }
+    return render(request, "clues/basic.html", context)
 
 
 def home(request):
     template = 'home/index.html'
     context = {
-        'adventures': adventure_image_urls
+        'adventures': get_adventures()
     }
 
     return render(request, template, context)
