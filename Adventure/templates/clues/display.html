@@ -6,10 +6,13 @@
 </header>
 <body>
 {% if answer == ""%}
-    <button id="begin">Click to Begin</button>
+    <button id="begin">Click to Receive Message</button>
     <br>
 {% endif %}
 <br>
+<p class="consolePrototype">
+    <span class="console">{{ character_name }}: </span><span id="caption">{% if answer != "correct" and answer != ""%}{{ message }}{% endif %}</span><span class="cursor">|</span>
+</p>
 {% if answer == "correct"%}
     <h2 class="text-center mt-0 bg-success">Correct!</h2>
     <button id="begin">Continue</button>
@@ -33,10 +36,6 @@
     <image class='cluemedia clueimagemedia' src="{{ image }}">
 {% endif %}
 <p id="user-caption" class="hidden">{{ message }}</p>
-<p class="consolePrototype">
-    <span class="console">{{ character_name }}: </span><span id="caption"></span><span class="cursor">|</span>
-</p>
-<p class="console">{% if answer != "correct" and answer != ""%}{{ message }}{% endif %}</p>
 <br>
 <br>
 {% if answer == "correct"%}
