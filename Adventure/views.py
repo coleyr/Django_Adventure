@@ -1,7 +1,7 @@
 from django.shortcuts import render, HttpResponse
 from django.template import loader
 from django.urls import reverse
-from .models import Adventure, Clue
+from .models import Adventure, Clue, Hint
 # Create your views here.
 
 def get_adventures():
@@ -12,8 +12,9 @@ def get_adventures():
             clueurl = reverse('clue', kwargs={'name': FirstClueName, 'adventure': adventure})
         except:
             clueurl = "#NO FIRST CLUE"
+        image = adventure.image.imagefile.url if adventure.image else ""
         adventures[adventure.name] = {
-        "image": adventure.image.imagefile.url,
+        "image": image,
         "description": adventure.description,
         "clueurl": clueurl
         }
@@ -27,6 +28,25 @@ def getnext(clue, adventure):
         return clueurl
     except:
         return ""
+
+def getcluehints(clue):
+    hint_objs = Hint.objects.filter(clue=clue)
+    character_name = clue.character_name
+    hints = makehintpage(hint_objs, character_name)
+    return hints
+
+
+def makehintpage(hints, character_name):
+    hinthtmllist = []
+    for hint in hints:
+        message = hint.hint_message
+        audio = hint.audio.audiofile.url if hint.audio else ""
+        video = hint.video.videofile.url if hint.video else ""
+        image = hint.image.imagefile.url if hint.image else ""
+        displaycontext = {'message': message,'audio': audio, 'video': video, 'image': image, "character_name": character_name}
+        displayhinthtml = loader.render_to_string("clues/hints.html", displaycontext)
+        hinthtmllist.append(displayhinthtml)
+    return hinthtmllist
 
 def getcurrent(clue, adventure):
     try:
@@ -46,6 +66,7 @@ def clue(request, adventure, name):
     audio = clue.audio.audiofile.url if clue.audio else ""
     video = clue.video.videofile.url if clue.video else ""
     image = clue.image.imagefile.url if clue.image else ""
+    hints = getcluehints(clue)
     displaycontext = {'message': message,'audio': audio, 'video': video, 'image': image, "character_name": character_name, "answer": given_answer}
     displayhtml = loader.render_to_string("clues/display.html", displaycontext)
     inputcontext = {"answer": given_answer}
@@ -68,7 +89,8 @@ def clue(request, adventure, name):
         'cluename': cluename,
         'display': displayhtml,
         'input': inputhtml,
-        'saveurl': absolute_url
+        'saveurl': absolute_url,
+        'hints': hints
     }
     return render(request, "clues/basic.html", context)
 

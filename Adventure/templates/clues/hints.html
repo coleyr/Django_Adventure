@@ -1,18 +1,34 @@
-<html>
+<header>
 {% load static %}
+
+<link rel="stylesheet" href="{% static 'css/typing_styles.css' %}">
+</header>
 <body>
-{% if answer != ""%}
-    <h2 class="text-center mt-0">Incorrect Answer: {{ answer }}</h2>
+<br>
+<p class="consolePrototype">
+    <span class="console">{{ character_name }}: </span><span>{{ message }}</span><span class="cursor">|</span>
+</p>
+{% if audio != ""%}
     <br>
+    <audio controls  unmuted id="Audio" src="{{ audio }}" preload="auto"></audio>
 {% endif %}
-<h2 class="text-center mt-0">Your Answer here</h2>
-<form id="answerform">
-    <!-- Message input-->
-    <div class="form-floating mb-3">
-        <label for="message"></label>
-        <textarea class="form-control" name="answer" type="text" placeholder="Enter your message here..." style="height: 10rem"></textarea>
-    </div>
-    <div class="d-grid"><button class="btn btn-primary btn-xl" id="submitButton" type="submit">Submit</button></div>
-</form>
+{% if video != ""%}
+<br>
+<p>Press to view full screen</p>
+<video class='cluemedia' controls="controls" preload='none' poster="">
+    <source id='mp4' src="http://media.w3.org/2010/05/sintel/trailer.mp4" type='video/mp4' />
+    <p>Your user agent does not support the HTML5 Video element.</p>
+</video>
+{% endif %}
+{% if image != ""%}
+    <br>
+    <p>Press to view full screen</p>
+    <image class='cluemedia clueimagemedia' src="{{ image }}">
+{% endif %}
+<p id="user-caption" class="hidden">{{ message }}</p>
+<br>
+<br>
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+<script src={% static 'js/typing.js' %} language="JavaScript"></script>
 </body>
-</html>
+

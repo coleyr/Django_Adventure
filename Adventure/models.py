@@ -54,20 +54,7 @@ class Video(models.Model):
             models.UniqueConstraint(fields=['videofile'], name='videofile_unique_constraint')
         ]
   
-class Hint(models.Model):
-    name = models.CharField(max_length=200, validators=[validate_slug])
-    audio = models.ForeignKey(Audio, on_delete=models.SET_NULL, related_query_name="audio", blank=True, null=True)
-    video = models.ForeignKey(Video, on_delete=models.SET_NULL, related_query_name="video", blank=True, null=True)
-    image = models.ForeignKey(Image, on_delete=models.SET_NULL, related_query_name="image", blank=True, null=True)
-    hint_message = models.TextField(max_length=500)
 
-    def __str__(self):
-        return f'{self.name}'
-
-    class Meta:
-        constraints = [
-            models.UniqueConstraint(fields=['hint_message', 'name'], name='hint_name_constraint')
-        ]
 
 ClueOrder = models.IntegerChoices('ClueOrder', 'FIRST SECOND THIRD FOURTH FIFTH SIXTH SEVENTH EIGHTH NINTH TENTH ELEVENTH TWELFTH THIRTEENTH FOURTEENTH FIFTEENTH')
 
@@ -82,7 +69,6 @@ class Clue(models.Model):
     audio = models.ForeignKey(Audio, on_delete=models.SET_NULL, related_query_name="audio", blank=True, null=True)
     video = models.ForeignKey(Video, on_delete=models.SET_NULL, related_query_name="video", blank=True, null=True)
     image = models.ForeignKey(Image, on_delete=models.SET_NULL, related_query_name="image", blank=True, null=True)
-    hint = models.ManyToManyField(Hint, related_query_name="hint", blank=True, null=True)
     def __str__(self):
         return f'{self.adventure.name} - Clue{self.clueorder}'
 
@@ -92,3 +78,17 @@ class Clue(models.Model):
         ]
 
 
+class Hint(models.Model):
+    name = models.CharField(max_length=200, validators=[validate_slug])
+    audio = models.ForeignKey(Audio, on_delete=models.SET_NULL, related_query_name="audio", blank=True, null=True)
+    video = models.ForeignKey(Video, on_delete=models.SET_NULL, related_query_name="video", blank=True, null=True)
+    image = models.ForeignKey(Image, on_delete=models.SET_NULL, related_query_name="image", blank=True, null=True)
+    hint_message = models.TextField(max_length=500)
+    clue = models.ForeignKey(Clue, on_delete=models.SET_NULL, related_query_name="clue", blank=True, null=True)
+    def __str__(self):
+        return f'{self.name}'
+
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(fields=['clue', 'name'], name='hint_name_constraint')
+        ]
