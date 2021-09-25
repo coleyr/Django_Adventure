@@ -1,0 +1,18 @@
+<html>
+{% load static %}
+<body>
+{% if answer != ""%}
+    <h2 class="text-center mt-0">Incorrect Answer: {{ answer }}</h2>
+    <br>
+{% endif %}
+<h2 class="text-center mt-0">Your Answer here</h2>
+<form id="answerform">
+    <!-- Message input-->
+    <div class="form-floating mb-3">
+        <label for="message"></label>
+        <textarea class="form-control" name="answer" type="text" placeholder="Enter your message here..." style="height: 10rem"></textarea>
+    </div>
+    <div class="d-grid"><button class="btn btn-primary btn-xl" id="submitButton" type="submit">Submit</button></div>
+</form>
+</body>
+</html>
