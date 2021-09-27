@@ -52,9 +52,9 @@ window.addEventListener('DOMContentLoaded', event => {
     });
 
     // Activate SimpleLightbox plugin for portfolio items
-    new SimpleLightbox({
-        elements: '#portfolio a.portfolio-box'
-    });
+    // new SimpleLightbox({
+    //     elements: '#portfolio a.portfolio-box'
+    // });
     function getreqfullscreen(){
         var root = document.documentElement
         return root.requestFullscreen || root.webkitRequestFullscreen || root.mozRequestFullScreen || root.msRequestFullscreen
@@ -96,5 +96,71 @@ window.addEventListener('DOMContentLoaded', event => {
             saveUrl() ;
         });
       });
+
+    });
+
+let captionLength = 0;
+let caption = '';
+
+function type(htmlElement, caption) {
+    htmlElement.html(caption.substr(0, captionLength++));
+    if (captionLength == caption.length) {
+        setTimeout(type, 75, htmlElement, caption);
+        showNext()
+    } else if (captionLength < caption.length + 1) {
+        setTimeout(type, 75, htmlElement, caption);
+    } else {
+        captionLength = 0;
+        caption = '';
+    }
+}
+
+
+function cursorAnimation() {
+    $('.cursor').animate({
+        opacity: 0
+    }, 'fast', 'swing').animate({
+        opacity: 1
+    }, 'fast', 'swing');
+};
+setInterval(cursorAnimation, 600);
+let pressed = false;
+
+$('#begin').click(function() {
+    if (!pressed) {
+        document.getElementById('begin').classList.add('hidden')
+        let htmlElement = $('#caption');
+        caption = $('#user-caption').text();
+        type(htmlElement, caption);
+        pressed = true
+    }
 });
+
+function play() {
+    const audio = document.getElementById('Audio');
+    audio.play();
+}
+
+
+
+function showNext() {
+    document.getElementById('nextbutton')?.classList.remove('hidden')
+}
+
+
+const hints = [...document.querySelectorAll(".showhint")]
+for (hint of hints){
+    const hintNumber = hints.indexOf(hint) + 1
+    hint.addEventListener("click", function () {
+        const hintdisplay = document.getElementById(`hint-${hintNumber}`);
+        const messagetext = document.querySelector(`#hint-${hintNumber} .messagecontents`).textContent
+        let messagedisplay = $(`#hint-${hintNumber} .mesagedisplay`)
+        if (hintdisplay.style.display === "none") {
+            hintdisplay.style.display = "block";
+            type(messagedisplay, messagetext)
+        } else {
+            hintdisplay.style.display = "none";
+        }
+        } )
+}
 

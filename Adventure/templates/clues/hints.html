@@ -1,12 +1,13 @@
 <header>
 {% load static %}
-
 <link rel="stylesheet" href="{% static 'css/typing_styles.css' %}">
 </header>
 <body>
 <br>
 <p class="consolePrototype">
-    <span class="console">{{ character_name }}: </span><span>{{ message }}</span><span class="cursor">|</span>
+    <br>
+    <p class="hidden messagecontents">{{ message }}</p>
+    <span class="console">{{ character_name }}: </span><span class="mesagedisplay"></span><span class="cursor">|</span>
 </p>
 {% if audio != ""%}
     <br>
@@ -25,10 +26,7 @@
     <p>Press to view full screen</p>
     <image class='cluemedia clueimagemedia' src="{{ image }}">
 {% endif %}
-<p id="user-caption" class="hidden">{{ message }}</p>
 <br>
 <br>
-<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
-<script src={% static 'js/typing.js' %} language="JavaScript"></script>
 </body>
 

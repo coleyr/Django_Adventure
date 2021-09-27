@@ -1,3 +1,6 @@
+from typing import List
+from django.db.models.query import QuerySet
+from django.http.request import QueryDict
 from django.shortcuts import render, HttpResponse
 from django.template import loader
 from django.urls import reverse
@@ -36,14 +39,18 @@ def getcluehints(clue):
     return hints
 
 
-def makehintpage(hints, character_name):
+def makehintpage(hints: QuerySet, character_name: str):
     hinthtmllist = []
     for hint in hints:
         message = hint.hint_message
         audio = hint.audio.audiofile.url if hint.audio else ""
         video = hint.video.videofile.url if hint.video else ""
         image = hint.image.imagefile.url if hint.image else ""
-        displaycontext = {'message': message,'audio': audio, 'video': video, 'image': image, "character_name": character_name}
+        displaycontext = {'message': message,
+        'audio': audio, 
+        'video': video,
+        'image': image,
+        "character_name": character_name}
         displayhinthtml = loader.render_to_string("clues/hints.html", displaycontext)
         hinthtmllist.append(displayhinthtml)
     return hinthtmllist
@@ -59,7 +66,7 @@ def getcurrent(clue, adventure):
 def clue(request, adventure, name):
     clue = Clue.objects.get(adventure__name__contains=adventure, name__contains=name)
     given_answer = request.GET.get("answer", "")
-    correct_answer = clue.answer == given_answer
+    correct_answer = clue.answer.lower() == given_answer.lower()
     cluename = clue.name
     message = clue.message
     character_name = clue.character_name
