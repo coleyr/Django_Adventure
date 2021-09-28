@@ -28,7 +28,7 @@ window.addEventListener('DOMContentLoaded', event => {
 
     // Shrink the navbar when page is scrolled
     document.addEventListener('scroll', navbarShrink);
-
+    
     // Activate Bootstrap scrollspy on the main nav element
     const mainNav = document.body.querySelector('#mainNav');
     if (mainNav) {
@@ -115,6 +115,16 @@ function type(htmlElement, caption) {
     }
 }
 
+function goToAnswer() {
+    const queryString = window.location.search
+    const urlParams = new URLSearchParams(queryString)
+    answerPresent = urlParams.get('Answer')
+    console.log(answerPresent);
+    if (answerPresent == null){
+        console.log("this ran");
+        document.getElementById('Answer').scrollIntoView();
+    }
+}
 
 function cursorAnimation() {
     $('.cursor').animate({
@@ -147,7 +157,6 @@ function showNext() {
     document.getElementById('nextbutton')?.classList.remove('hidden')
 }
 
-
 const hints = [...document.querySelectorAll(".showhint")]
 for (hint of hints){
     const hintNumber = hints.indexOf(hint) + 1
@@ -164,3 +173,4 @@ for (hint of hints){
         } )
 }
 
+goToAnswer()

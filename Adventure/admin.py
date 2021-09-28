@@ -1,13 +1,30 @@
 from django.contrib import admin
 from django.contrib.admin.helpers import Fieldline
-from .models import Adventure,  Audio, Image, Clue, Video, Hint
+from django.core.exceptions import ViewDoesNotExist
+from .models import Adventure,  Audio, ClueOrder, Image, Clue, Video, Hint
 # Register your models here.
+
+
 
 class HintInline(admin.TabularInline):
     model = Hint
+    classes = ['extrapretty','collapse']
+class ImageInline(admin.TabularInline):
+    model = Image
+    classes = ['extrapretty','collapse']
+class VideoInline(admin.TabularInline):
+    model = Video
+    classes = ['extrapretty','collapse']
+
+class AudioInline(admin.TabularInline):
+    model = Audio
+    classes = ['extrapretty','collapse']
 
 class ClueAdmin(admin.ModelAdmin):
     inlines = [
+        ImageInline,
+        VideoInline,
+        AudioInline,
         HintInline,
     ]
 

@@ -4,7 +4,7 @@ from django.http.request import QueryDict
 from django.shortcuts import render, HttpResponse
 from django.template import loader
 from django.urls import reverse
-from .models import Adventure, Clue, Hint
+from .models import Adventure, Clue, Hint, Image, Video, Audio
 # Create your views here.
 
 def get_adventures():
@@ -15,7 +15,7 @@ def get_adventures():
             clueurl = reverse('clue', kwargs={'name': FirstClueName, 'adventure': adventure})
         except:
             clueurl = "#NO FIRST CLUE"
-        image = adventure.image.imagefile.url if adventure.image else ""
+        image = adventure.image.url if adventure.image else ""
         adventures[adventure.name] = {
         "image": image,
         "description": adventure.description,
@@ -38,6 +38,20 @@ def getcluehints(clue):
     hints = makehintpage(hint_objs, character_name)
     return hints
 
+def getmedia(clue):
+    # I know this is long form but it is easier to know
+    # what the heck this is doing
+    image, audio, video = {}, {}, {}
+    clue_imgs = Image.objects.filter(clue=clue)
+    clue_audio = Audio.objects.filter(clue=clue)
+    clue_video = Video.objects.filter(clue=clue)
+    for img in clue_imgs:
+        image[img.name] = img.imagefile.url
+    for vid in clue_video:
+        video[vid.name] = vid.videofile.url
+    for aud in clue_audio:
+        audio[aud.name] = aud.audiofile.url
+    return image, audio, video
 
 def makehintpage(hints: QuerySet, character_name: str):
     hinthtmllist = []
@@ -68,16 +82,7 @@ def clue(request, adventure, name):
     given_answer = request.GET.get("answer", "")
     correct_answer = clue.answer.lower() == given_answer.lower()
     cluename = clue.name
-    message = clue.message
     character_name = clue.character_name
-    audio = clue.audio.audiofile.url if clue.audio else ""
-    video = clue.video.videofile.url if clue.video else ""
-    image = clue.image.imagefile.url if clue.image else ""
-    hints = getcluehints(clue)
-    displaycontext = {'message': message,'audio': audio, 'video': video, 'image': image, "character_name": character_name, "answer": given_answer}
-    displayhtml = loader.render_to_string("clues/display.html", displaycontext)
-    inputcontext = {"answer": given_answer}
-    inputhtml = loader.render_to_string("clues/input.html", inputcontext)
     absolute_url = request.build_absolute_uri(getcurrent(clue, adventure))
     if correct_answer:
         nextclue = getnext(clue, adventure) or ""
@@ -91,6 +96,13 @@ def clue(request, adventure, name):
         'saveurl': absolute_url
     }
         return render(request, "clues/basic.html", context)
+    message = clue.message
+    image, audio, video = getmedia(clue)
+    hints = getcluehints(clue)
+    displaycontext = {'message': message,'audio': audio, 'video': video, 'image': image, "character_name": character_name, "answer": given_answer}
+    displayhtml = loader.render_to_string("clues/display.html", displaycontext)
+    inputcontext = {"answer": given_answer}
+    inputhtml = loader.render_to_string("clues/input.html", inputcontext)
     context = {
         'adventure': adventure,
         'cluename': cluename,

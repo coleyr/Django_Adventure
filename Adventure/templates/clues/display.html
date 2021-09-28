@@ -4,7 +4,7 @@
 
 <link rel="stylesheet" href="{% static 'css/typing_styles.css' %}">
 </header>
-<body>
+<body class="gx-4 gx-lg-5 h-100 align-items-center justify-content-center text-center">
 {% if answer == "correct"%}
     <h2 class="text-center mt-0 bg-success">Correct!</h2>
     <button id="begin">Continue</button>
@@ -13,29 +13,33 @@
 {% if answer == ""%}
     <button class="btn btn-light btn-xl" id="begin">Click to Receive Message</button>
     <br>
+    <hr class="divider" />
 {% endif %}
 <br>
-<p class="consolePrototype">
-    <span class="console">{{ character_name }}: </span><span id="caption">{% if answer != "correct" and answer != ""%}{{ message }}{% endif %}</span><span class="cursor">|</span>
-</p>
+<h4 class="consolePrototype ">
+    <span class="console">{{ character_name }}: </span><span id="caption" class="font-weight-bold">{% if answer != "correct" and answer != ""%}{{ message }}{% endif %}</span><span class="cursor">|</span>
+</h4>
 
-{% if audio != ""%}
+{% for audioname, audiourl in audio.items %}
+    <hr class="divider" />
     <br>
-    <audio controls  unmuted id="Audio" src="{{ audio }}" preload="auto"></audio>
-{% endif %}
-{% if video != ""%}
+    <audio controls  unmuted id="Audio" src="{{ audiourl }}" preload="auto"></audio>
+{% endfor %}
+{% for videoname, videourl in video.items %}
+<hr class="divider" />
 <br>
 <p>Press to view full screen</p>
 <video class='cluemedia' controls="controls" preload='none' poster="">
-    <source id='mp4' src="{{ video }}" type='video/mp4' />
+    <source id='mp4' src="{{ videourl }}" type='video/mp4' />
     <p>Your user agent does not support the HTML5 Video element.</p>
 </video>
-{% endif %}
-{% if image != ""%}
+{% endfor %}
+{% for imagename, imageurl in image.items %}
+    <hr class="divider" />
     <br>
     <p>Press to view full screen</p>
-    <image class='cluemedia clueimagemedia' src="{{ image }}">
-{% endif %}
+    <image class='cluemedia clueimagemedia' src="{{ imageurl }}">
+{% endfor %}
 <p id="user-caption" class="hidden">{{ message }}</p>
 <br>
 <br>
