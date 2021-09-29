@@ -118,11 +118,10 @@ function type(htmlElement, caption) {
 function goToAnswer() {
     const queryString = window.location.search
     const urlParams = new URLSearchParams(queryString)
-    answerPresent = urlParams.get('Answer')
-    console.log(answerPresent);
-    if (answerPresent == null){
-        console.log("this ran");
-        document.getElementById('Answer').scrollIntoView();
+    const Answer = document.getElementById('Answer')
+    answerPresent = urlParams.get('answer') ?? false
+    if (answerPresent && !document.querySelector('#Answer h2').textContent.startsWith('Correct Answer')){
+        Answer.scrollIntoView();
     }
 }
 
