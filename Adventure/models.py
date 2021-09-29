@@ -4,7 +4,7 @@ from django.db.models.deletion import CASCADE, SET_DEFAULT, SET_NULL
 
 # Create your models here.
 class Adventure(models.Model):
-    name = models.CharField(max_length=200, validators=[validate_slug])
+    name = models.CharField(max_length=200)
     description = models.TextField(max_length=500)
     image = models.FileField(upload_to='images', default='images/default.jpg')
     def __str__(self):

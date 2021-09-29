@@ -16,29 +16,35 @@
     <hr class="divider" />
 {% endif %}
 <br>
-<h4 class="consolePrototype ">
+<h4 class="consolePrototype big-bottom">
     <span class="console">{{ character_name }}: </span><span id="caption" class="font-weight-bold">{% if answer != "correct" and answer != ""%}{{ message }}{% endif %}</span><span class="cursor">|</span>
 </h4>
 
 {% for audioname, audiourl in audio.items %}
-    <hr class="divider" />
-    <br>
-    <audio controls  unmuted id="Audio" src="{{ audiourl }}" preload="auto"></audio>
+    <div class="big-bottom">
+        <hr class="divider" />
+        <br>
+        <audio controls  unmuted id="Audio" src="{{ audiourl }}" preload="auto"></audio>
+    </div>
 {% endfor %}
 {% for videoname, videourl in video.items %}
 <hr class="divider" />
 <br>
-<p>Press to view full screen</p>
-<video class='cluemedia' controls="controls" preload='none' poster="">
-    <source id='mp4' src="{{ videourl }}" type='video/mp4' />
-    <p>Your user agent does not support the HTML5 Video element.</p>
-</video>
+    <div class="big-bottom">
+    <p>Press to view full screen</p>
+    <video class='cluemedia' controls="controls" preload='none' poster="">
+        <source id='mp4' src="{{ videourl }}" type='video/mp4' />
+        <p>Your user agent does not support the HTML5 Video element.</p>
+    </video>
+    </div>
 {% endfor %}
 {% for imagename, imageurl in image.items %}
-    <hr class="divider" />
-    <br>
-    <p>Press to view full screen</p>
-    <image class='cluemedia clueimagemedia' src="{{ imageurl }}">
+    <div class="big-bottom">
+        <hr class="divider" />
+        <br>
+        <p>Press to view full screen</p>
+        <image class='cluemedia clueimagemedia' src="{{ imageurl }}">
+    </div>
 {% endfor %}
 <p id="user-caption" class="hidden">{{ message }}</p>
 <br>
@@ -48,7 +54,7 @@
         <input type="button" class="btn btn-primary btn-xl hidden" id="nextbutton" onclick="location.href='{{ nextclue }}';" value="Next" />
     {% endif %}
     {% if nextclue == ""%}
-        <p class="col-lg-8 col-xl-6 text-center">No Next Clue Yet</p>
+        <h3 class="gx-4 gx-lg-5 h-100 align-items-center justify-content-center text-center">No Next Clue Yet...</h3>
     {% endif %}
 {% endif %}
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
