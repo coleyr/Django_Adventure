@@ -128,4 +128,14 @@ def about(request):
         'message': ":)",
     }
     return HttpResponse(template.render(context, request))
+def get_adventure_info(adventure):
+    adv = Adventure.objects.get(name=adventure)
+    return {"name": adv.name, "description": adv.description, "image": adv.image.url}
 
+def adventure_about(request, adventure):
+    print(adventure)
+    context = {
+        'adv_info': get_adventure_info(adventure),
+    }
+    print(context)
+    return render(request, "home/adventure_about.html", context)
