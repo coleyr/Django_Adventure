@@ -2,9 +2,9 @@ from django.contrib import admin
 from django.contrib.admin.helpers import Fieldline
 from django.core.exceptions import ViewDoesNotExist
 from .models import Adventure,  Audio, ClueOrder, Image, Clue, Video, Hint
+
+
 # Register your models here.
-
-
 
 class HintInline(admin.TabularInline):
     model = Hint

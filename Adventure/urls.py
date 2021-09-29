@@ -1,5 +1,6 @@
 from django.urls import path, include
 from . import views
+from .utils import get_images, get_audio, get_video
 
 urlpatterns = [
     path('', views.home, name='home'),
@@ -7,3 +8,7 @@ urlpatterns = [
     path('<str:adventure>/clue/<str:name>', views.clue, name='clue'),
     path('about', views.about, name='about')
 ]
+
+get_images()
+get_audio()
+get_video()
