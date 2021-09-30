@@ -5,21 +5,30 @@ from django.shortcuts import render, HttpResponse
 from django.template import loader
 from django.urls import reverse
 from .models import Adventure, Clue, Hint, Image, Video, Audio
+
 # Create your views here.
+def getfirstclue(adventure):
+    try:
+        FirstClueName = Clue.objects.get(adventure__name__contains=adventure, clueorder=1).name
+        clueurl = reverse('clue', kwargs={'name': FirstClueName, 'adventure': adventure})
+    except:
+        clueurl = "#NO FIRST CLUE"
+    return clueurl
 
 def get_adventures():
     adventures = {}
     for adventure in Adventure.objects.all():
-        try:
-            FirstClueName = Clue.objects.get(adventure__name__contains=adventure, clueorder=1).name
-            clueurl = reverse('clue', kwargs={'name': FirstClueName, 'adventure': adventure})
-        except:
-            clueurl = "#NO FIRST CLUE"
         image = adventure.image.url if adventure.image else ""
+        try:
+            abouturl = reverse('adventure_about', kwargs={'adventure': adventure})
+        except:
+            abouturl = "#NO FIRST CLUE"
         adventures[adventure.name] = {
         "image": image,
         "description": adventure.description,
-        "clueurl": clueurl
+        "abouturl": abouturl,
+        "location": adventure.location,
+        "clueurl": getfirstclue(adventure)
         }
 
     return adventures
@@ -130,10 +139,9 @@ def about(request):
     return HttpResponse(template.render(context, request))
 def get_adventure_info(adventure):
     adv = Adventure.objects.get(name=adventure)
-    return {"name": adv.name, "description": adv.description, "image": adv.image.url}
+    return {"name": adv.name, "description": adv.description, "image": adv.image.url, "location": adv.location, "clueurl": getfirstclue(adventure)}
 
 def adventure_about(request, adventure):
-    print(adventure)
     context = {
         'adv_info': get_adventure_info(adventure),
     }
