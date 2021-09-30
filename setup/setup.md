@@ -7,3 +7,5 @@ path to apache /etc/apache2/sites-availa ble/000-default.con
 The permissions on the db are set too high .... 
 ## ssl
 https://certbot.eff.org/lets-encrypt/ubuntubionic-apache
+## DNS setup 
+https://w3path.com/point-domain-to-aws-ec2-instance/
