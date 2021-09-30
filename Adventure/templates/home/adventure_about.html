@@ -28,33 +28,43 @@
             </nav>
             <!-- Header-->
             <header class="py-5">
-                <div class="container px-5">
-                    <div class="row justify-content-center">
-                        <div class="col-lg-8 col-xxl-6">
-                            <div class="text-center my-5">
-                                <h1 class="fw-bolder mb-3">{{ adv_info.name }}</h1>
-                                <p class="lead fw-normal text-muted mb-4"></p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </header>
-            <!-- About section one-->
-            <section class="py-5 bg-light" id="scroll-target">
+                <section class="">
                 <div class="container px-5 my-5">
                     <div class="row gx-5 align-items-center">
+                        <div class="col-lg-6 order-first order-lg-last"><img class="img-fluid rounded mb-5 mb-lg-0" src="/media/images/together.jpg" alt="..." /></div>
                         <div class="col-lg-6">
-                            <h2 class="fw-bolder">Location of this adventure</h2>
-                            <p class="lead fw-normal text-muted mb-0">{{ adv_info.location }}</p>
-                        </div>
-                        <div class="col-lg-6">
-                            <h2 class="fw-bolder">About</h2>
-                            <p class="lead fw-normal text-muted mb-0">{{ adv_info.description }}</p>
+                            <h1 class="fw-bolder mb-3 text-center">{{ adv_info.name }}</h1>
                         </div>
                     </div>
                 </div>
             </section>
-            <a class="btn btn-primary btn-lg px-4 me-sm-3" href="{{ adv_info.clueurl }}">Click to start</a>
+            </header>
+            <!-- About section one-->
+            <section class="bg-light" id="scroll-target">
+                <div class="container my-5">
+                    <div class="row gx-5 align-items-center">
+                        <div class="col-lg-6  px-5">
+                            <h2 class="fw-bolder text-center">Location of this adventure</h2>
+                            <p class="lead fw-normal text-muted mb-0 text-center mb-3">{{ adv_info.location }}</p>
+                        </div>
+                        <div class="col-lg-6 px-5">
+                            <h2 class="fw-bolder text-center">About</h2>
+                            <p class="lead fw-normal text-muted mb-0 text-center mb-3">{{ adv_info.description }}</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <section class="py-5">
+                <div class="container px-5 my-5">
+                    <div class="row gx-5 justify-content-center">
+                        <div class="col-lg-8 col-xl-6">
+                            <div class="text-center">
+                                <a class="btn btn-primary btn-xl" href="{{ adv_info.clueurl }}">Click to start</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section> 
         </main>
         <!-- Footer-->
         <footer class="bg-dark py-4 mt-auto">
