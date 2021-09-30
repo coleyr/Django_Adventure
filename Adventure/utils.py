@@ -1,10 +1,11 @@
 from os import listdir
 from os import path
+from django.conf import settings
 from os.path import isfile, join
 from .models import Audio, Image, Video
 
 def get_images():
-    mypath = "./media/images"
+    mypath = f"{settings.MEDIA_ROOT}/images"
     imgfiles = [f for f in listdir(mypath) if isfile(join(mypath, f))]
     for img in imgfiles:
         obj, created = Image.objects.get_or_create(
@@ -14,7 +15,7 @@ def get_images():
             obj.save()
 
 def get_video():
-    mypath = "./media/video"
+    mypath = f"{settings.MEDIA_ROOT}/video"
     vidfiles = [f for f in listdir(mypath) if isfile(join(mypath, f))]
     for vid in vidfiles:
         obj, created = Video.objects.get_or_create(
@@ -24,7 +25,7 @@ def get_video():
             obj.save()
 
 def get_audio():
-    mypath = "./media/audio"
+    mypath = f"{settings.MEDIA_ROOT}/audio"
     audfiles = [f for f in listdir(mypath) if isfile(join(mypath, f))]
     for aud in audfiles:
         obj, created = Audio.objects.get_or_create(
