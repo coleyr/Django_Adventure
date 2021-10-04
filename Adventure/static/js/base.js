@@ -6,7 +6,7 @@
 //
 // Scripts
 // 
-
+import confetti from "https://cdn.skypack.dev/canvas-confetti";
 window.addEventListener('DOMContentLoaded', event => {
 
     // Navbar shrink function
@@ -119,7 +119,7 @@ function goToAnswer() {
     const queryString = window.location.search
     const urlParams = new URLSearchParams(queryString)
     const Answer = document.getElementById('Answer')
-    answerPresent = urlParams.get('answer') ?? false
+    const answerPresent = urlParams.get('answer') ?? false
     if (answerPresent && !document.querySelector('#Answer h2').textContent.startsWith('Correct Answer')){
         Answer.scrollIntoView();
     }
@@ -156,11 +156,7 @@ function showNext() {
     document.getElementById('nextbutton')?.classList.remove('hidden')
 }
 
-function finalClue() {
-    if (document.getElementById('final')) {
-        document.querySelector(`header.masthead`).style.backgroundColor = "Green";;
-}
-}
+
 const hints = [...document.querySelectorAll(".showhint")]
 for (hint of hints){
     const hintNumber = hints.indexOf(hint) + 1
@@ -176,6 +172,21 @@ for (hint of hints){
         }
         } )
 }
-
+function playConfetti(num) {
+    for (let i = 0; i < num; i++) {
+        console.log(`${i}`);
+        (function(index) {
+            setTimeout(confetti, i * 2000);
+        })(i);
+    } 
+}
+function finalClue() {
+    const correctPresent = document.querySelector('#Answer h2').textContent.startsWith('Correct Answer')
+    const finalPresent = document.getElementById('final')
+    if (correctPresent && finalPresent){
+        document.querySelector(`header.masthead`).style.background = "linear-gradient(#198055, #198754)"
+        playConfetti(5)
+    }
+}
 goToAnswer()
 finalClue()
