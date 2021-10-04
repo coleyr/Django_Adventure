@@ -27,7 +27,7 @@ def validate_audio_extension(value):
 # Create your models here.
 class Adventure(models.Model):
     name = models.CharField(max_length=200)
-    description = models.TextField(max_length=500)
+    description = models.TextField(max_length=5000)
     location = models.CharField(max_length=128, default="No Specific Location")
     image = models.FileField(upload_to='images', default='images/default.jpg')
     def __str__(self):
@@ -40,12 +40,12 @@ class Adventure(models.Model):
 
 ClueOrder = models.IntegerChoices('ClueOrder', 'FIRST SECOND THIRD FOURTH FIFTH SIXTH SEVENTH EIGHTH NINTH TENTH ELEVENTH TWELFTH THIRTEENTH FOURTEENTH FIFTEENTH')
 class Clue(models.Model):
-    name = models.CharField(max_length=100)
+    name = models.CharField(max_length=200)
     character_name = models.CharField(max_length=100, default="Det. Ace Palmer")
-    message = models.TextField(max_length=1000, default="Enter message here")
-    success_message = models.TextField(max_length=1000, default="Enter message to be displayed on successful entry of answer")
+    message = models.TextField(max_length=5000, default="Enter message here")
+    success_message = models.TextField(max_length=5000, default="Enter message to be displayed on successful entry of answer")
     adventure = models.ForeignKey(Adventure, on_delete=models.CASCADE, related_query_name="adventure")
-    answer = models.CharField(max_length=100)
+    answer = models.CharField(max_length=1000)
     clueorder = models.IntegerField(choices=ClueOrder.choices)
 
     def __str__(self):

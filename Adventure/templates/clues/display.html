@@ -19,7 +19,14 @@
 <h4 class="consolePrototype big-bottom">
     <span class="console">{{ character_name }}: </span><span id="caption" class="font-weight-bold">{% if answer != "correct" and answer != ""%}{{ message }}{% endif %}</span><span class="cursor">|</span>
 </h4>
-
+{% if answer == "correct"%}
+    {% if nextclue != ""%}
+        <input type="button" class="btn btn-primary btn-xl hidden" id="nextbutton" onclick="location.href='{{ nextclue }}';" value="Next" />
+    {% endif %}
+    {% if nextclue == ""%}
+        <h3 id="final" class="gx-4 gx-lg-5 h-100 align-items-center justify-content-center text-center">You did it!</h3>
+    {% endif %}
+{% endif %}
 {% for audioname, audiourl in audio.items %}
     <div class="big-bottom">
         <hr class="divider" />
@@ -49,14 +56,7 @@
 <p id="user-caption" class="hidden">{{ message }}</p>
 <br>
 <br>
-{% if answer == "correct"%}
-    {% if nextclue != ""%}
-        <input type="button" class="btn btn-primary btn-xl hidden" id="nextbutton" onclick="location.href='{{ nextclue }}';" value="Next" />
-    {% endif %}
-    {% if nextclue == ""%}
-        <h3 class="gx-4 gx-lg-5 h-100 align-items-center justify-content-center text-center">No Next Clue Yet...</h3>
-    {% endif %}
-{% endif %}
+
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
 {% comment %} <script src={% static 'js/typing.js' %} language="JavaScript"></script> {% endcomment %}
 </body>

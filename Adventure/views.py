@@ -15,6 +15,12 @@ def getfirstclue(adventure):
         clueurl = "#NO FIRST CLUE"
     return clueurl
 
+def abbrieviate(message: str):
+    if len(message) > 100:
+        return message[0:100] + "..."
+    else:
+        return message
+
 def get_adventures():
     adventures = {}
     for adventure in Adventure.objects.all():
@@ -25,7 +31,7 @@ def get_adventures():
             abouturl = "#NO FIRST CLUE"
         adventures[adventure.name] = {
         "image": image,
-        "description": adventure.description,
+        "description": abbrieviate(adventure.description),
         "abouturl": abouturl,
         "location": adventure.location,
         "clueurl": getfirstclue(adventure)
@@ -87,7 +93,7 @@ def getcurrent(clue, adventure):
         return "#"
 
 def clue(request, adventure, name):
-    clue = Clue.objects.get(adventure__name__contains=adventure, name__contains=name)
+    clue = Clue.objects.get(adventure__name__contains=adventure, name=name)
     given_answer = request.GET.get("answer", "")
     correct_answer = clue.answer.lower() == given_answer.lower()
     cluename = clue.name
@@ -137,6 +143,7 @@ def about(request):
         'message': ":)",
     }
     return HttpResponse(template.render(context, request))
+
 def get_adventure_info(adventure):
     adv = Adventure.objects.get(name=adventure)
     return {"name": adv.name, "description": adv.description, "image": adv.image.url, "location": adv.location, "clueurl": getfirstclue(adventure)}
@@ -145,5 +152,4 @@ def adventure_about(request, adventure):
     context = {
         'adv_info': get_adventure_info(adventure),
     }
-    print(context)
     return render(request, "home/adventure_about.html", context)

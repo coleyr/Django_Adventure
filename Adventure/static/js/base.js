@@ -156,6 +156,11 @@ function showNext() {
     document.getElementById('nextbutton')?.classList.remove('hidden')
 }
 
+function finalClue() {
+    if (document.getElementById('final')) {
+        document.querySelector(`header.masthead`).style.backgroundColor = "Green";;
+}
+}
 const hints = [...document.querySelectorAll(".showhint")]
 for (hint of hints){
     const hintNumber = hints.indexOf(hint) + 1
@@ -173,3 +178,4 @@ for (hint of hints){
 }
 
 goToAnswer()
+finalClue()
