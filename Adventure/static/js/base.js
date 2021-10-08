@@ -158,7 +158,7 @@ function showNext() {
 
 
 const hints = [...document.querySelectorAll(".showhint")]
-for (hint of hints){
+for (const hint of hints){
     const hintNumber = hints.indexOf(hint) + 1
     hint.addEventListener("click", function () {
         const hintdisplay = document.getElementById(`hint-${hintNumber}`);
