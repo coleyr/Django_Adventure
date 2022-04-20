@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django.contrib.admin.helpers import Fieldline
 from django.core.exceptions import ViewDoesNotExist
-from .models import Adventure,  Audio, ClueOrder, Image, Clue, Video, Hint
+from .models import Adventure,  Audio, ClueOrder, Image, Clue, Video, Hint, Map
 
 
 # Register your models here.
@@ -19,9 +19,12 @@ class VideoInline(admin.TabularInline):
 class AudioInline(admin.TabularInline):
     model = Audio
     classes = ['extrapretty','collapse']
-
+class MapInline(admin.TabularInline):
+    model = Map
+    classes = ['extrapretty','collapse']
 class ClueAdmin(admin.ModelAdmin):
     inlines = [
+        MapInline,
         ImageInline,
         VideoInline,
         AudioInline,
@@ -35,4 +38,5 @@ admin.site.register(Audio)
 admin.site.register(Image)
 admin.site.register(Clue, ClueAdmin)
 admin.site.register(Video)
+admin.site.register(Map)
 # admin.site.register(Hint)

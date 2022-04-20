@@ -10,6 +10,8 @@
     <button id="begin">Continue</button>
     <br>
 {% endif %}
+{{ map }}
+<div id="message">
 {% if answer == ""%}
     <button class="btn btn-light btn-xl" id="begin">Click to Receive Message</button>
     <br>
@@ -53,6 +55,7 @@
         <image class='cluemedia clueimagemedia' src="{{ imageurl }}">
     </div>
 {% endfor %}
+</div>
 <p id="user-caption" class="hidden">{{ message }}</p>
 <br>
 <br>

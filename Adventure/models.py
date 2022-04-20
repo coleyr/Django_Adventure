@@ -70,7 +70,20 @@ class Image(models.Model):
             models.UniqueConstraint(fields=['imagefile'], name='imagefile_unique_constraint')
         ]
 
+class Map(models.Model):
+    lat = models.CharField(max_length=100)
+    lng = models.CharField(max_length=100)
+    radius = models.IntegerField(default=30)
+    name = models.CharField(max_length=100)
+    clue = models.ForeignKey(Clue, on_delete=models.SET_NULL, related_query_name="clue", blank=True, null=True)
+    required = models.BooleanField(default=False)
 
+    def __str__(self):
+        return f'{self.name}'
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(fields=['lat', 'lng', 'clue'], name='map_unique_constraint')
+        ]
 
 
 

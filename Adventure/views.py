@@ -4,7 +4,7 @@ from django.http.request import QueryDict
 from django.shortcuts import render, HttpResponse
 from django.template import loader
 from django.urls import reverse
-from .models import Adventure, Clue, Hint, Image, Video, Audio
+from .models import Adventure, Clue, Hint, Image, Video, Audio, Map
 
 # Create your views here.
 def getfirstclue(adventure):
@@ -56,17 +56,20 @@ def getcluehints(clue):
 def getmedia(clue):
     # I know this is long form but it is easier to know
     # what the heck this is doing
-    image, audio, video = {}, {}, {}
+    image, audio, video, map = {}, {}, {}, {}
     clue_imgs = Image.objects.filter(clue=clue)
     clue_audio = Audio.objects.filter(clue=clue)
     clue_video = Video.objects.filter(clue=clue)
+    clue_maps = Map.objects.filter(clue=clue)
     for img in clue_imgs:
         image[img.name] = img.imagefile.url
     for vid in clue_video:
         video[vid.name] = vid.videofile.url
     for aud in clue_audio:
         audio[aud.name] = aud.audiofile.url
-    return image, audio, video
+    for map in clue_maps:
+        map = {'lat':map.lat, 'lng':map.lng, 'radius':map.radius, 'required':map.required}
+    return image, audio, video, map
 
 def makehintpage(hints: QuerySet, character_name: str):
     hinthtmllist = []
@@ -101,7 +104,7 @@ def clue(request, adventure, name):
     absolute_url = request.build_absolute_uri(getcurrent(clue, adventure))
     if correct_answer:
         nextclue = getnext(clue, adventure) or ""
-        displaycontext = {'message': clue.success_message, 'audio': "", 'video': "", 'image': "", "character_name": character_name, "answer": "correct", 'nextclue': nextclue}
+        displaycontext = {'message': clue.success_message, 'audio': "", 'video': "", 'image': "", 'map': "", "character_name": character_name, "answer": "correct", 'nextclue': nextclue}
         displayhtml = loader.render_to_string("clues/display.html", displaycontext)
         context = {
         'adventure': adventure,
@@ -112,9 +115,10 @@ def clue(request, adventure, name):
     }
         return render(request, "clues/basic.html", context)
     message = clue.message
-    image, audio, video = getmedia(clue)
+    image, audio, video, map = getmedia(clue)
+    maphtml = loader.render_to_string("clues/map.html", map) if map else ""
     hints = getcluehints(clue)
-    displaycontext = {'message': message,'audio': audio, 'video': video, 'image': image, "character_name": character_name, "answer": given_answer}
+    displaycontext = {'message': message,'audio': audio, 'video': video, 'image': image, "character_name": character_name, "answer": given_answer, "map":maphtml}
     displayhtml = loader.render_to_string("clues/display.html", displaycontext)
     inputcontext = {"answer": given_answer}
     inputhtml = loader.render_to_string("clues/input.html", inputcontext)

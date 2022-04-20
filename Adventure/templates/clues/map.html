@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+{% load static %}
+<head>
+  <link
+    rel="stylesheet"
+    href="https://unpkg.com/leaflet@1.8.0/dist/leaflet.css"
+    integrity="sha512-hoalWLoI8r4UszCkZ5kL8vayOGVae1oxXe/2A4AO6J9+580uKHDO3JdHb7NzwwzK5xr/Fs0W40kiNHxM9vyTtQ=="
+    crossorigin=""
+  />
+  <script
+  src="https://unpkg.com/leaflet@1.8.0/dist/leaflet.js"
+  integrity="sha512-BB3hKbKWOc9Ez/TAwyWxNXeoV9c1v6FIeYiBieIWkpLjauysF18NzgR1MBNBXf8/KABdlkX68nAhlwcDFLGPCQ=="
+  crossorigin=""
+></script>
+  <style>
+    #map {
+      height: 80vh;
+    }
+    .displayNone {
+      display: None;
+    }
+    .map_arrived_shadow {
+      border-radius: 9999px;
+      box-shadow: 0 0 50px 25px #20c997;
+    }
+
+  </style>
+</head>
+<body>
+  <div class="displayNone" id="targetRadius">{{ radius }}</div>
+  <div class="displayNone" id="targetLat">{{ lat }}</div>
+  <div class="displayNone" id="targetLng">{{ lng }}</div>
+  <div class="displayNone" id="required">{{ required }}</div>
+  <div class="displayNone" id="fingerprint_icon">{% static 'icons/X.svg' %}</div>
+  {% if required == True %}
+    <h2 class="text-center mt-0 console" id="map_instrunction">Follow the map to the specified location to continue...<h2>
+  {% endif%}
+  {% if required != True %}
+    <h2 class="text-center mt-0 console" id="map_instrunction">Follow the map to the specified location<h2>
+  {% endif%}
+  <br><br>
+  <div id="map">Map</div>
+  <br><br>
+  <p class="text-center mt-0 console font-weight-bold" id="distance">Feet From Target: </p>
+  <p class="text-center mt-0 console font-weight-bold" id="feet"></p>
+  <br><br>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script type="module" src="{% static 'js/map.js' %}"></script>
+</body>
